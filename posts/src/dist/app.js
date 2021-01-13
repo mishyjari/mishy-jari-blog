@@ -7,15 +7,12 @@ var body_parser_1 = require("body-parser");
 var cookie_session_1 = require("cookie-session");
 var app = express_1["default"]();
 exports.app = app;
-// Import routes
-var signup_1 = require("./routes/signup");
-var currentUser_1 = require("./routes/currentUser");
-var signin_1 = require("./routes/signin");
-var signout_1 = require("./routes/signout");
-var updateUser_1 = require("./routes/updateUser");
-var deleteUser_1 = require("./routes/deleteUser");
-var showUser_1 = require("./routes/showUser");
-// Allow ingress proxying
+// Import Routes
+var showPost_1 = require("./routes/showPost");
+var newPost_1 = require("./routes/newPost");
+var editPost_1 = require("./routes/editPost");
+var deletePost_1 = require("./routes/deletePost");
+// Allow Ingress Proxying
 app.set('trust proxy', true);
 // Returns middleware that only parses json and only looks at requests 
 // where the Content-Type header matches the type option.
@@ -26,11 +23,8 @@ app.use(cookie_session_1["default"]({
     // Allow non-https requests when running tests
     secure: process.env.NODE_ENV !== 'test'
 }));
-// Set use for routers
-app.use(signup_1.signupRouter);
-app.use(currentUser_1.currentUserRouter);
-app.use(signin_1.signinRouter);
-app.use(signout_1.signoutRouter);
-app.use(updateUser_1.updateUserRouter);
-app.use(deleteUser_1.deleteUserRouter);
-app.use(showUser_1.showUserRouter);
+// Use routers
+app.use(showPost_1.showPostRouter);
+app.use(newPost_1.newPostRouter);
+app.use(editPost_1.editPostRouter);
+app.use(deletePost_1.deletePostRouter);

@@ -1,5 +1,8 @@
 # MishyJari Blog
 
+[1/12/21]
+- Initial commit. Auth server, user models and routes working
+
 ## Concept
 
 Impliment a microservices architecure within docker containers to create a blog service for personal use. *Possible future use: expand to a multi-user platform to make a Medium clone of sorts.*

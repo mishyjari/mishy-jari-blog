@@ -36,35 +36,57 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.showUserRouter = void 0;
+exports.editPostRouter = void 0;
 var express_1 = require("express");
-var user_1 = require("../models/user");
+var express_validator_1 = require("express-validator");
+var post_1 = require("../models/post");
 var common_1 = require("@mfrattaroli/common");
 var router = express_1["default"].Router();
-exports.showUserRouter = router;
-router.get('/api/users', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, user_1.User.find({})];
+exports.editPostRouter = router;
+router.post('/api/posts', common_1.currentUser, [
+    express_validator_1.body('title')
+        .trim()
+        .not()
+        .isEmpty()
+        .withMessage('Title Required'),
+    express_validator_1.body('title')
+        .trim()
+        .not()
+        .isEmpty()
+        .withMessage('Title Required'),
+], common_1.validateRequest, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var errors, _a, title, content, tags, post, err_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                errors = express_validator_1.validationResult(req);
+                if (errors) {
+                    console.log(errors);
+                    throw new common_1.BadRequestError('Request validation failed');
+                }
+                ;
+                _a = req.body, title = _a.title, content = _a.content, tags = _a.tags;
+                _b.label = 1;
             case 1:
-                users = _a.sent();
-                res.send(users);
-                return [2 /*return*/];
-        }
-    });
-}); });
-router.get('/api/users/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, user_1.User.findById(req.params.id)];
-            case 1:
-                user = _a.sent();
-                if (!user)
-                    throw new common_1.NotFoundError();
-                res.send(user);
-                return [2 /*return*/];
+                _b.trys.push([1, 3, , 4]);
+                post = post_1.Post.findById(req.params.id);
+                if (post.userId !== req.currentUser.id) {
+                    throw new common_1.NotAuthorizedError();
+                }
+                post.title = title;
+                post.content = content;
+                post.tags = tags;
+                return [4 /*yield*/, post.save()];
+            case 2:
+                _b.sent();
+                res.status(200).send(post);
+                return [3 /*break*/, 4];
+            case 3:
+                err_1 = _b.sent();
+                console.log('Error in new post route handler', err_1);
+                res.status(500).send({});
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

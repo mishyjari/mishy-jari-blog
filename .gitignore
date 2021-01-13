@@ -1,3 +1,5 @@
 .vscode
 .DS_Store
 auth/node_modules
+posts/node_modules
+comments/node_modules
